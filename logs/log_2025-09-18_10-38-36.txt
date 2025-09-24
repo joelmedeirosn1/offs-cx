@@ -1,0 +1,48 @@
+Pipeline iniciado em: 2025-09-18 10:38:36
+==================================================
+
+--> Executando: limpar_arquivos.py
+Iniciando limpeza das pastas de trabalho...
+INFO: Pasta 'C:\Users\RT\Documents\cx off\src\..\downloads' limpa com sucesso.
+INFO: Pasta 'C:\Users\RT\Documents\cx off\src\..\fotos' limpa com sucesso.
+AVISO: Pasta nao encontrada, pulando limpeza: C:\Users\RT\Documents\cx off\src\..\fotos_cortadas
+INFO: Limpeza finalizada.
+--> Finalizado: limpar_arquivos.py
+
+--> Executando: deletar_fotos_minio.py
+AVISO: Nenhum arquivo encontrado no bucket para deletar.
+--> Finalizado: deletar_fotos_minio.py
+
+--> Executando: processar_email.py
+INFO: Conectando ao servidor de e-mail...
+INFO: Conectado e caixa de entrada selecionada.
+INFO: E-mail encontrado, processando...
+INFO: Anexo PDF baixado: C:\Users\RT\Documents\cx off\downloads\pdfs\OFF's_-_GERAL_(CX).pdf
+INFO: PDF convertido para JPEG: C:\Users\RT\Documents\cx off\fotos\OFF's_-_GERAL_(CX).jpeg
+INFO: Conexao com o e-mail fechada.
+--> Finalizado: processar_email.py
+
+--> Executando: salvar_minio.py
+Traceback (most recent call last):
+  File "C:\Users\RT\Documents\cx off\src\salvar_minio.py", line 45, in enviar_para_minio
+    print(f"\u2705 Upload para MinIO concluído: {remote_path}")
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\RT\Documents\cx off\src\salvar_minio.py", line 75, in <module>
+    enviar_todas_as_imagens()
+  File "C:\Users\RT\Documents\cx off\src\salvar_minio.py", line 72, in enviar_todas_as_imagens
+    enviar_para_minio(caminho_completo)
+  File "C:\Users\RT\Documents\cx off\src\salvar_minio.py", line 50, in enviar_para_minio
+    print(f"\u274c Erro ao enviar {nome_arquivo_local}: {e}")
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>
+
+!!! ERRO FATAL ao executar salvar_minio.py: O pipeline foi interrompido.

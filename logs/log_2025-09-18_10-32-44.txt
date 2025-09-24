@@ -1,0 +1,33 @@
+Pipeline iniciado em: 2025-09-18 10:32:44
+==================================================
+
+🚀 Executando: limpar_arquivos.py
+Iniciando limpeza das pastas de trabalho...
+INFO: Pasta 'C:\Users\RT\Documents\cx off\src\..\downloads' limpa com sucesso.
+INFO: Pasta 'C:\Users\RT\Documents\cx off\src\..\fotos' limpa com sucesso.
+AVISO: Pasta nao encontrada, pulando limpeza: C:\Users\RT\Documents\cx off\src\..\fotos_cortadas
+INFO: Limpeza finalizada.
+✅ Finalizado: limpar_arquivos.py
+
+🚀 Executando: deletar_fotos_minio.py
+Traceback (most recent call last):
+  File "C:\Users\RT\Documents\cx off\src\deletar_fotos_minio.py", line 37, in deletar_fotos_minio
+    print(f"\U0001f5d1\ufe0f  Deletado: {chave}")
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\RT\Documents\cx off\src\deletar_fotos_minio.py", line 45, in <module>
+    deletar_fotos_minio()
+  File "C:\Users\RT\Documents\cx off\src\deletar_fotos_minio.py", line 42, in deletar_fotos_minio
+    print(f"\u274c Erro na conex�o com o MinIO: {e}")
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>
+
+❌ ERRO FATAL ao executar deletar_fotos_minio.py: O pipeline foi interrompido.
