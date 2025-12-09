@@ -1,4 +1,4 @@
-# src/processar_email.py (versão final sem emojis)
+# src/processar_email.py
 import os
 import imaplib
 import email
@@ -84,7 +84,6 @@ def processar_email():
         print("AVISO: E-mail encontrado, mas nenhum anexo PDF foi localizado.")
 
     except Exception as e:
-        # Linha corrigida - sem emoji
         print(f"ERRO: Erro no processamento do e-mail: {e}")
     finally:
         if imap_connection:

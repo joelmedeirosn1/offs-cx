@@ -1,0 +1,14 @@
+# Diretório de perfil do Chrome/Selenium
+perfil_bot/
+
+# Ignorar o diretório de arquivos de cache de fotos gerados
+fotos/
+
+# Ignorar pastas de instalação do webdriver-manager
+.wdm/
+
+# Ignorar Python cache e arquivos de ambiente virtual
+__pycache__/
+*.pyc
+.venv/
+venv/

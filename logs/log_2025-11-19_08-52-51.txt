@@ -1,0 +1,32 @@
+Pipeline iniciado em: 2025-11-19 08:52:51
+==================================================
+
+--> Executando: limpar_arquivos.py
+Iniciando limpeza das pastas de trabalho...
+ERRO: Falha ao deletar C:\Users\RT\Documents\cx off\src\..\downloads\pdfs. Razao: [WinError 5] Acesso negado: 'C:\\Users\\RT\\Documents\\cx off\\src\\..\\downloads\\pdfs'
+INFO: Pasta 'C:\Users\RT\Documents\cx off\src\..\downloads' limpa com sucesso.
+INFO: Pasta 'C:\Users\RT\Documents\cx off\src\..\fotos' limpa com sucesso.
+AVISO: Pasta nao encontrada, pulando limpeza: C:\Users\RT\Documents\cx off\src\..\fotos_cortadas
+INFO: Limpeza finalizada.
+--> Finalizado: limpar_arquivos.py
+
+--> Executando: deletar_fotos_minio.py
+INFO: Encontrado(s) 1 arquivo(s) para deletar no MinIO.
+INFO: Arquivos na pasta 'cx/compartilhado/offs/tambau' deletados com sucesso (com exceção de falhas listadas acima).
+--> Finalizado: deletar_fotos_minio.py
+
+--> Executando: processar_email.py
+INFO: Conectando ao servidor de e-mail...
+INFO: Conectado e caixa de entrada selecionada.
+INFO: E-mail encontrado, processando...
+INFO: Anexo PDF baixado: C:\Users\RT\Documents\cx off\downloads\pdfs\OFF's_-_GERAL_(CX).pdf
+INFO: PDF convertido para JPEG: C:\Users\RT\Documents\cx off\fotos\OFF's_-_GERAL_(CX).jpeg
+INFO: Conexao com o e-mail fechada.
+--> Finalizado: processar_email.py
+
+--> Executando: salvar_minio.py
+INFO: Upload para MinIO concluido: cx/compartilhado/offs/tambau/OFF's_-_GERAL_(CX).jpeg
+--> Finalizado: salvar_minio.py
+==================================================
+
+==> Pipeline finalizado com sucesso!

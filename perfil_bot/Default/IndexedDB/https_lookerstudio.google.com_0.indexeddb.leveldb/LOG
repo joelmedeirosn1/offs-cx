@@ -1,0 +1,13 @@
+2025/12/09-16:42:19.165 5170 Reusing MANIFEST C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/12/09-16:42:19.165 5170 Recovering log #166
+2025/12/09-16:42:19.166 5170 Reusing old log C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/000166.log 
+2025/12/09-16:42:19.180 45fc Level-0 table #171: started
+2025/12/09-16:42:19.181 45fc Level-0 table #171: 1584 bytes OK
+2025/12/09-16:42:19.183 45fc Delete type=0 #166
+2025/12/09-16:42:19.184 6ef8 Manual compaction at level-0 from '\x00B\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00C\x00\x00\x00' @ 0 : 0; will stop at '\x00B\x00\x00\x05' @ 2180 : 1
+2025/12/09-16:42:19.184 6ef8 Compacting 1@0 + 1@1 files
+2025/12/09-16:42:19.188 6ef8 Generated table #172@0: 45 keys, 953 bytes
+2025/12/09-16:42:19.188 6ef8 Compacted 1@0 + 1@1 files => 953 bytes
+2025/12/09-16:42:19.189 6ef8 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/12/09-16:42:19.189 6ef8 Delete type=2 #171
+2025/12/09-16:42:19.190 6ef8 Manual compaction at level-0 from '\x00B\x00\x00\x05' @ 2180 : 1 .. '\x00C\x00\x00\x00' @ 0 : 0; will stop at (end)

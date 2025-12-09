@@ -1,0 +1,37 @@
+Pipeline iniciado em: 2025-12-05 11:09:42
+==================================================
+
+--> Executando: limpar_arquivos.py
+Iniciando limpeza das pastas de trabalho...
+INFO: Pasta 'C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\src\..\downloads' limpa com sucesso.
+INFO: Pasta 'C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\src\..\fotos' limpa com sucesso.
+INFO: Limpeza finalizada.
+--> Finalizado: limpar_arquivos.py
+
+--> Executando: deletar_fotos_minio.py
+==> Iniciando pipeline. Log sera salvo em: C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\src\logs\log_2025-12-05_11-09-43.txt
+--> Executando: limpar_arquivos.py
+
+!!! ERRO FATAL ao executar limpar_arquivos.py: O pipeline foi interrompido.
+
+
+==================== RELATÓRIO DE ERRO ====================
+O erro abaixo ocorreu dentro do script secundário e foi capturado no log:
+
+Pipeline iniciado em: 2025-12-05 11:09:43
+==================================================
+
+--> Executando: limpar_arquivos.py
+C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\venv\Scripts\python.exe: can't open file 'C:\\Users\\RT-121\\Documents\\RT\\cx off-20251125T174423Z-1-001\\cx off\\src\\src\\limpar_arquivos.py': [Errno 2] No such file or directory
+
+!!! ERRO FATAL ao executar limpar_arquivos.py: O pipeline foi interrompido.
+
+============================================================
+
+
+INFO: Tentando enviar notificacao de erro por e-mail...
+INFO: E-mail de notificacao enviado com sucesso.
+
+==> Pipeline finalizado COM ERROS!
+
+!!! ERRO FATAL ao executar deletar_fotos_minio.py: O pipeline foi interrompido.

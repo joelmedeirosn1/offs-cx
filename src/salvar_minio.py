@@ -1,76 +1,63 @@
-# src/salvar_minio.py (versão final sem emojis)
 import os
 from dotenv import load_dotenv
 import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
 
-# Carregar variáveis de ambiente do .env na raiz do projeto
-dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+# Carregar variáveis de ambiente
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+dotenv_path = os.path.join(PROJECT_ROOT, '.env')
 load_dotenv(dotenv_path=dotenv_path)
 
-# Variáveis de configuração do MinIO
+# Configurações fixas do MinIO
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY")
 MINIO_BUCKET = os.getenv("MINIO_BUCKET")
-MINIO_FOLDER = os.getenv("MINIO_FOLDER")
+# A pasta padrão continua vindo do .env, caso não seja informada outra
+MINIO_FOLDER_PADRAO = os.getenv("MINIO_FOLDER")
 
-# A pasta de onde pegaremos as imagens é a 'fotos'
-PASTA_FOTOS = "fotos"
+def get_minio_client():
+    return boto3.client(
+        's3',
+        endpoint_url=MINIO_ENDPOINT,
+        aws_access_key_id=MINIO_ACCESS_KEY,
+        aws_secret_access_key=MINIO_SECRET_KEY
+    )
 
-def enviar_para_minio(nome_arquivo_local: str):
+def enviar_arquivo(caminho_local, pasta_destino=None):
     """
-    Envia um arquivo de imagem local para o MinIO no bucket e pasta configurados.
+    Envia um arquivo local para o MinIO.
+    :param caminho_local: Caminho do arquivo no PC.
+    :param pasta_destino: (Opcional) Pasta no MinIO. Se não informado, usa a do .env.
     """
+    if not pasta_destino:
+        pasta_destino = MINIO_FOLDER_PADRAO
+
+    if not os.path.isfile(caminho_local):
+        print(f"ERRO: Arquivo não encontrado: {caminho_local}")
+        return False
+
+    nome_arquivo = os.path.basename(caminho_local)
+    remote_path = f"{pasta_destino}/{nome_arquivo}" # Caminho final na nuvem
+
+    client = get_minio_client()
+    
     try:
-        s3 = boto3.client(
-            's3',
-            endpoint_url=MINIO_ENDPOINT,
-            aws_access_key_id=MINIO_ACCESS_KEY,
-            aws_secret_access_key=MINIO_SECRET_KEY
+        content_type = 'image/jpeg'
+        if nome_arquivo.lower().endswith('.png'):
+            content_type = 'image/png'
+        elif nome_arquivo.lower().endswith('.pdf'):
+            content_type = 'application/pdf'
+
+        client.upload_file(
+            caminho_local,
+            MINIO_BUCKET,
+            remote_path,
+            ExtraArgs={'ContentType': content_type}
         )
+        print(f"✅ Upload Sucesso: {nome_arquivo} -> {remote_path}")
+        return True
 
-        if not os.path.isfile(nome_arquivo_local):
-            print(f"ERRO: Arquivo local nao encontrado: {nome_arquivo_local}")
-            return
-
-        remote_path = f"{MINIO_FOLDER}/{os.path.basename(nome_arquivo_local)}"
-        
-        content_type = 'image/jpeg' if nome_arquivo_local.lower().endswith(('.jpeg', '.jpg')) else 'image/png'
-        extra_args = { 'ContentType': content_type }
-
-        s3.upload_file(nome_arquivo_local, MINIO_BUCKET, remote_path, ExtraArgs=extra_args)
-        # Linha corrigida - sem emoji
-        print(f"INFO: Upload para MinIO concluido: {remote_path}")
-
-    except NoCredentialsError:
-        print("ERRO: Credenciais ausentes ao conectar com o MinIO. Verifique seu .env.")
-    except ClientError as e:
-        print(f"ERRO: Erro de cliente ao conectar com o MinIO: {e}")
     except Exception as e:
-        # Linha corrigida - sem emoji
-        print(f"ERRO: Erro inesperado ao enviar {nome_arquivo_local}: {e}")
-
-def enviar_todas_as_imagens():
-    """
-    Envia todas as imagens da pasta 'fotos' para o MinIO.
-    """
-    caminho_raiz_projeto = os.path.join(os.path.dirname(__file__), '..')
-    caminho_pasta_fotos = os.path.join(caminho_raiz_projeto, PASTA_FOTOS)
-
-    if not os.path.isdir(caminho_pasta_fotos):
-        print(f"AVISO: Pasta de origem nao encontrada: {caminho_pasta_fotos}")
-        return
-
-    imagens = [f for f in os.listdir(caminho_pasta_fotos) if f.lower().endswith((".jpeg", ".png", ".jpg"))]
-
-    if not imagens:
-        print("AVISO: Nenhuma imagem encontrada para envio na pasta 'fotos'.")
-        return
-
-    for imagem in imagens:
-        caminho_completo = os.path.join(caminho_pasta_fotos, imagem)
-        enviar_para_minio(caminho_completo)
-
-if __name__ == "__main__":
-    enviar_todas_as_imagens()
+        print(f"❌ Erro no upload de {nome_arquivo}: {e}")
+        return False

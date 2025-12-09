@@ -2,7 +2,7 @@
 import os
 import shutil
 
-PASTAS_PARA_LIMPAR = ["downloads", "fotos", "fotos_cortadas"]
+PASTAS_PARA_LIMPAR = ["downloads", "fotos",]
 
 def limpar_pasta(caminho_pasta):
     if not os.path.isdir(caminho_pasta):

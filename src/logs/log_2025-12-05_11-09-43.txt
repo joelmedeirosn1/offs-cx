@@ -1,0 +1,7 @@
+Pipeline iniciado em: 2025-12-05 11:09:43
+==================================================
+
+--> Executando: limpar_arquivos.py
+C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\venv\Scripts\python.exe: can't open file 'C:\\Users\\RT-121\\Documents\\RT\\cx off-20251125T174423Z-1-001\\cx off\\src\\src\\limpar_arquivos.py': [Errno 2] No such file or directory
+
+!!! ERRO FATAL ao executar limpar_arquivos.py: O pipeline foi interrompido.
