@@ -1,4 +1,4 @@
-2025/12/09-16:38:22.508 2ba0 Reusing MANIFEST C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/12/09-16:38:22.509 2ba0 Recovering log #166
-2025/12/09-16:38:22.510 2ba0 Reusing old log C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/000166.log 
-2025/12/09-16:38:22.521 5f5c Manual compaction at level-0 from '\x00A\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00B\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/10-09:35:02.554 3cb8 Reusing MANIFEST C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/12/10-09:35:02.555 3cb8 Recovering log #190
+2025/12/10-09:35:02.556 3cb8 Reusing old log C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/000190.log 
+2025/12/10-09:35:02.571 39e8 Manual compaction at level-0 from '\x00J\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00K\x00\x00\x00' @ 0 : 0; will stop at (end)

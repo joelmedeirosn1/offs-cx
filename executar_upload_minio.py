@@ -121,29 +121,38 @@ def limpar_diretorio_geral(s3_client, bucket, prefixo):
     print(f"   ✅ Limpeza concluída. Total apagado: {total_removido}")
 
 def enviar_arquivos():
-    print("--- 🚀 INICIANDO UPLOAD DOS PDFs ---")
+    print("--- 🚀 INICIANDO UPLOAD DOS PDFs (MANTENDO ESTRUTURA) ---")
     
     if not os.path.exists(PASTA_FOTOS):
         print(f"[ERRO] A pasta '{PASTA_FOTOS}' não existe.")
         return
 
-    arquivos = [f for f in os.listdir(PASTA_FOTOS) if f.lower().endswith('.pdf')]
-    if not arquivos:
-        print("[AVISO] Nenhum PDF encontrado na pasta local 'fotos'.")
+    # 1. Varredura Recursiva
+    arquivos_para_enviar = []
+    print(f"🔎 Varrendo pasta local: {PASTA_FOTOS}")
+    
+    for root, dirs, files in os.walk(PASTA_FOTOS):
+        for file in files:
+            if file.lower().endswith('.pdf'):
+                caminho_completo = os.path.join(root, file)
+                arquivos_para_enviar.append(caminho_completo)
+
+    if not arquivos_para_enviar:
+        print("[AVISO] Nenhum PDF encontrado na pasta local 'fotos' ou subpastas.")
         return
 
-    print(f"📄 Arquivos locais encontrados: {len(arquivos)}")
+    print(f"📄 Arquivos PDF encontrados: {len(arquivos_para_enviar)}")
     
-    # 1. Conecta
+    # 2. Conecta
     try:
         s3 = obter_cliente_s3()
-        s3.list_objects_v2(Bucket=MINIO_BUCKET, MaxKeys=1) # Teste rápido
+        s3.list_objects_v2(Bucket=MINIO_BUCKET, MaxKeys=1) 
         print("✅ Conexão com MinIO OK.")
     except Exception as e:
         print(f"❌ Erro de conexão com MinIO: {e}")
         return
 
-    # 2. Descobre pasta raiz e Limpa
+    # 3. Descobre pasta raiz e Limpa
     pasta_raiz = obter_pasta_raiz_offs()
     if pasta_raiz:
         limpar_diretorio_geral(s3, MINIO_BUCKET, pasta_raiz)
@@ -151,17 +160,24 @@ def enviar_arquivos():
         print("[ERRO] Não foi possível determinar a pasta raiz 'offs' pelo config.")
         return
 
-    # 3. Envia Arquivos
+    # 4. Envia Arquivos
     print("\n--- 📤 ENVIANDO ARQUIVOS ---")
     sucessos = 0
     erros = 0
 
-    for arquivo in arquivos:
-        # Monta caminho remoto: compartilhado/offs/CLIENTE.pdf
-        key_remota = f"{pasta_raiz}/{arquivo}"
-        caminho_local = os.path.join(PASTA_FOTOS, arquivo)
+    for caminho_local in arquivos_para_enviar:
+        # === MUDANÇA CRUCIAL AQUI ===
+        # Calcula o caminho relativo à pasta "fotos". 
+        # Ex: Se o arquivo é "fotos/Relatorio_X/Cliente.pdf", retorna "Relatorio_X/Cliente.pdf"
+        caminho_relativo = os.path.relpath(caminho_local, PASTA_FOTOS)
         
-        print(f"> {arquivo} ... ", end="")
+        # Converte contrabarra (Windows) para barra normal (MinIO/Linux)
+        caminho_relativo_s3 = caminho_relativo.replace(os.sep, '/')
+        
+        # Monta o caminho final: offs/Relatorio_X/Cliente.pdf
+        key_remota = f"{pasta_raiz}/{caminho_relativo_s3}"
+        
+        print(f"> {caminho_relativo_s3} ... ", end="")
         sys.stdout.flush()
         
         try:

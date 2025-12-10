@@ -28,7 +28,7 @@ CLIENTES = {
     "PRATSY": "cx/compartilhado/offs/pratsy",
     "QUALICOCO": "cx/compartilhado/offs/qualicoco",
     "SALTON": "cx/compartilhado/offs/salton",
-    "SANDÁLIA TIMES": "cx/compartilhado/offs/sandalia-times",
+    "SANDALIAS TIMES": "cx/compartilhado/offs/sandalia-times",
     "SATURNO": "cx/compartilhado/offs/saturno",
     "SKAFE": "cx/compartilhado/offs/skafe",
     "TAMBAU": "cx/compartilhado/offs/tambau",
