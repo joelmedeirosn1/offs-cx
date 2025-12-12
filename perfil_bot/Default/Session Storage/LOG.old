@@ -1,6 +1,6 @@
-2025/12/11-15:55:03.516 4824 Reusing MANIFEST C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\Session Storage/MANIFEST-000001
-2025/12/11-15:55:03.520 4824 Recovering log #61
-2025/12/11-15:55:03.529 4824 Reusing old log C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\Session Storage/000061.log 
-2025/12/11-15:56:05.155 27cc Level-0 table #64: started
-2025/12/11-15:56:05.161 27cc Level-0 table #64: 40513 bytes OK
-2025/12/11-15:56:05.163 27cc Delete type=0 #61
+2025/12/12-09:51:23.547 272c Reusing MANIFEST C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\Session Storage/MANIFEST-000001
+2025/12/12-09:51:23.550 272c Recovering log #63
+2025/12/12-09:51:23.555 272c Reusing old log C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\Session Storage/000063.log 
+2025/12/12-09:54:25.557 272c Level-0 table #67: started
+2025/12/12-09:54:25.565 272c Level-0 table #67: 40916 bytes OK
+2025/12/12-09:54:25.567 272c Delete type=0 #63

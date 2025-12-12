@@ -71,12 +71,16 @@ class RelatorioNav:
             print(f"      ❌ Erro input ({xpath}): {e}")
 
     def configurar_justificativas(self):
-        """ Filtra usando BUSCA + SELECIONAR TUDO (Híbrido) """
+        """ 
+        Filtra usando BUSCA + SELECIONAR TUDO.
+        Usa varredura global para encontrar itens visíveis.
+        """
         print("\n📝 Configurando FILTRO DE JUSTIFICATIVAS...")
         wait = WebDriverWait(self.driver, 10)
         itens_selecionados = 0
         
         try:
+            # 1. Abre menu
             abriu = False
             for xpath in cfg.XPATHS_BOTAO_JUSTIFICATIVA:
                 if self.bot.clique_robusto(xpath, tentativas=2):
@@ -87,16 +91,18 @@ class RelatorioNav:
                 return False
             time.sleep(2)
 
-            # Reset
+            # 2. Reset (Limpa Seleção)
             try:
                 self.bot.clique_robusto(cfg.XPATH_CHECKBOX_HEADER)
-                print("      ✅ Seleção Limpa.")
+                print("      ✅ Seleção Limpa (Reset).")
                 time.sleep(1.5)
             except: pass
 
+            # 3. Busca e Seleciona
             print(f"   -> Filtrando {len(cfg.LISTA_JUSTIFICATIVAS)} termos...")
             
             try:
+                # Tenta achar input de busca (Qualquer input visível no painel)
                 input_busca = WebDriverWait(self.driver, 4).until(EC.visibility_of_element_located((By.XPATH, cfg.XPATH_INPUT_BUSCA)))
                 
                 for termo in cfg.LISTA_JUSTIFICATIVAS:
@@ -105,30 +111,54 @@ class RelatorioNav:
                     input_busca.send_keys(Keys.CONTROL + "a")
                     input_busca.send_keys(Keys.DELETE)
                     input_busca.send_keys(termo)
-                    time.sleep(2) 
+                    time.sleep(3) # Tempo aumentado para garantir renderização da lista
                     
-                    # Detecção Híbrida: Busca textos ou checkboxes visíveis
-                    xpath_res = f"//div[contains(@class, 'cdk-overlay-pane')]//*[contains(text(), '{termo}')] | //div[contains(@class, 'cdk-overlay-pane')]//md-checkbox"
-                    visiveis = [el for el in self.driver.find_elements(By.XPATH, xpath_res) if el.is_displayed()]
+                    # --- DETECÇÃO GLOBAL VISÍVEL ---
+                    # Busca por md-checkboxes na página toda (//body//...)
+                    # Como o menu é um overlay, eles estarão visíveis.
+                    # Excluímos o header checkbox baseado em posição ou classe se necessário, mas geralmente ele é o primeiro.
+                    
+                    # Estratégia A: Buscar qualquer md-checkbox visível que NÃO seja o header
+                    # O Header geralmente não está dentro de md-virtual-repeat-container
+                    xpath_itens = "//md-virtual-repeat-container//md-checkbox"
+                    
+                    # Estratégia B: Fallback para divs com o texto
+                    xpath_textos = f"//md-virtual-repeat-container//*[contains(text(), '{termo}')]"
+
+                    # Coleta candidatos
+                    candidatos = self.driver.find_elements(By.XPATH, f"{xpath_itens} | {xpath_textos}")
+                    
+                    # Filtra APENAS os visíveis
+                    visiveis = [el for el in candidatos if el.is_displayed()]
 
                     if visiveis:
-                        # Tenta Header primeiro (mais rápido)
-                        if self.bot.clique_robusto(cfg.XPATH_CHECKBOX_HEADER, tentativas=1):
-                            print(f"        -> [OK] Selecionados {len(visiveis)} itens (Header).")
-                            itens_selecionados += 1
+                        print(f"        -> [Encontrados] {len(visiveis)} itens visíveis.")
+                        
+                        # Tenta Header primeiro (Se houver muitos itens, é mais rápido)
+                        if len(visiveis) > 1 and self.bot.clique_robusto(cfg.XPATH_CHECKBOX_HEADER, tentativas=1):
+                             print(f"           -> [OK] Selecionados via Header.")
+                             itens_selecionados += len(visiveis)
                         else:
-                            # Fallback: Clica no primeiro item
-                            self.driver.execute_script("arguments[0].click();", visiveis[0])
-                            itens_selecionados += 1
+                            # Fallback: Clica um por um
+                            print(f"           -> [Fallback] Clicando um por um...")
+                            for item in visiveis:
+                                try:
+                                    # Clica no centro do elemento via JS
+                                    self.driver.execute_script("arguments[0].click();", item)
+                                    time.sleep(0.2)
+                                except: pass
+                            itens_selecionados += len(visiveis)
                     else:
-                        print(f"        -> [Vazio] Nenhuma ocorrência para '{termo}'.")
+                        print(f"        -> [Vazio] Nenhuma ocorrência visual para '{termo}'.")
                 
+                # Limpa busca
                 input_busca.send_keys(Keys.CONTROL + "a")
                 input_busca.send_keys(Keys.DELETE)
 
             except Exception as e:
                 print(f"   ⚠️ Erro na busca ({e}).")
 
+            # Fecha menu
             ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
             time.sleep(0.5)
             try: self.driver.find_element(By.TAG_NAME, "body").click()
@@ -147,9 +177,12 @@ class RelatorioNav:
             return False
 
     def filtrar_cliente(self, nome_cliente):
+        """ Filtra cliente garantindo Seleção Única (Somente). """
+        # Limpa estado
         try: self.driver.execute_script("document.body.click();")
         except: pass
         
+        # Abre Filtro
         sucesso = False
         for xpath in cfg.XPATHS_FILTRO_CLIENTE:
             if self.bot.clique_robusto(xpath, tentativas=2):
@@ -161,6 +194,7 @@ class RelatorioNav:
 
         time.sleep(1.5)
         
+        # Digita
         try:
             caixa = self.driver.find_element(By.CSS_SELECTOR, "input[type='text']")
             caixa.click()
@@ -176,19 +210,33 @@ class RelatorioNav:
             return False
 
         try:
+            # Localiza o item na lista
             item_xpath = f"//div[@role='option' or contains(@class, 'item')]//*[contains(text(), '{nome_cliente}')]"
             item = WebDriverWait(self.driver, 4).until(EC.visibility_of_element_located((By.XPATH, item_xpath)))
             
+            # --- GARANTIA DE SELEÇÃO ÚNICA ---
+            # Move o mouse para cima do item para revelar o botão "SOMENTE"
+            ActionChains(self.driver).move_to_element(item).perform()
+            time.sleep(0.5)
+            
             clicou_somente = False
             try:
-                btn_somente = self.driver.find_element(By.XPATH, "//span[contains(text(), 'Somente') or contains(text(), 'Only') or contains(text(), 'somente')]")
-                if btn_somente.is_displayed():
-                    self.driver.execute_script("arguments[0].click();", btn_somente)
-                    print("   -> Clicou em 'Somente'.")
-                    clicou_somente = True
-            except: pass
+                # Busca o botão Somente que esteja visível
+                btn_somente = WebDriverWait(self.driver, 2).until(
+                    EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Somente') or contains(text(), 'Only') or contains(text(), 'somente')]"))
+                )
+                
+                # Clica no Somente
+                self.driver.execute_script("arguments[0].click();", btn_somente)
+                print("   -> Clicou em 'Somente' (Seleção Única Garantida).")
+                clicou_somente = True
+            except:
+                print("   ⚠️ Botão 'Somente' não apareceu.")
 
+            # Se não conseguiu clicar em somente, clica no item (Fallback)
+            # Nota: Isso pode misturar clientes se o filtro não limpou antes, mas é o melhor fallback possível
             if not clicou_somente:
+                print("   -> Clicando no item (Fallback).")
                 item.click()
             
             return True

@@ -1,5 +1,13 @@
-2025/12/11-15:55:07.504 16e4 Reusing MANIFEST C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/12/11-15:55:07.505 16e4 Recovering log #510
-2025/12/11-15:55:07.505 16e4 Reusing old log C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/000510.log 
-2025/12/11-15:55:07.505 16e4 Delete type=2 #508
-2025/12/11-15:55:07.517 2490 Manual compaction at level-0 from '\x00\xae\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\xaf\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/12-09:51:28.106 578 Reusing MANIFEST C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/12/12-09:51:28.107 578 Recovering log #534
+2025/12/12-09:51:28.108 578 Reusing old log C:\Users\RT-121\Documents\RT\cx off-20251125T174423Z-1-001\cx off\perfil_bot\Default\IndexedDB\https_lookerstudio.google.com_0.indexeddb.leveldb/000534.log 
+2025/12/12-09:51:28.128 2568 Level-0 table #539: started
+2025/12/12-09:51:28.130 2568 Level-0 table #539: 1285 bytes OK
+2025/12/12-09:51:28.131 2568 Delete type=0 #534
+2025/12/12-09:51:28.131 4e40 Manual compaction at level-0 from '\x00\xb7\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\xb8\x00\x00\x00' @ 0 : 0; will stop at '\x00\xb7\x00\x00\x05' @ 6041 : 1
+2025/12/12-09:51:28.132 4e40 Compacting 1@0 + 1@1 files
+2025/12/12-09:51:28.136 4e40 Generated table #540@0: 45 keys, 953 bytes
+2025/12/12-09:51:28.136 4e40 Compacted 1@0 + 1@1 files => 953 bytes
+2025/12/12-09:51:28.136 4e40 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/12/12-09:51:28.137 4e40 Delete type=2 #539
+2025/12/12-09:51:28.137 4e40 Manual compaction at level-0 from '\x00\xb7\x00\x00\x05' @ 6041 : 1 .. '\x00\xb8\x00\x00\x00' @ 0 : 0; will stop at (end)

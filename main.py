@@ -1,5 +1,6 @@
 import time
 import sys
+import requests # Requer: pip install requests
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -21,6 +22,30 @@ except ImportError:
     print("❌ Erro: CLIENTES não encontrado.")
     CLIENTES = {}
 
+def acionar_n8n():
+    """ Envia um sinal para o N8N iniciar o fluxo """
+    if not cfg.N8N_WEBHOOK_URL or "seu-n8n" in cfg.N8N_WEBHOOK_URL:
+        print("\n⚠️ URL do Webhook não configurada em src/config.py. N8N não será chamado.")
+        return
+
+    print(f"\n📞 Chamando N8N...")
+    try:
+        # Envia dados úteis para o N8N, como o nome da pasta que acabou de ser criada
+        payload = {
+            "pasta_relatorio": cfg.nome_pasta_data, 
+            "data_filtro": cfg.texto_periodo_filtro,
+            "status": "concluido"
+        }
+        
+        response = requests.post(cfg.N8N_WEBHOOK_URL, json=payload)
+        
+        if response.status_code == 200:
+            print("✅ N8N acionado com sucesso!")
+        else:
+            print(f"⚠️ N8N retornou erro: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"❌ Falha ao chamar N8N: {e}")
+
 def processar_relatorio():
     # 1. Inicialização
     bot = BotDriver()
@@ -30,15 +55,18 @@ def processar_relatorio():
     pdf_mgr.limpar_pasta_temporaria()
     
     print("   -> Acessando Looker Studio...")
-    bot.get("https://lookerstudio.google.com/u/0/reporting/ada033a0-55d4-4d59-981e-d65bd7e1a581/page/8gyPF")
+    # URL default ou do config
+    bot.get(getattr(cfg, 'URL_RELATORIO', "https://lookerstudio.google.com/u/0/reporting/ada033a0-55d4-4d59-981e-d65bd7e1a581/page/8gyPF"))
     
     print("\n" + "="*50)
-    print(" 🤖 ROBÔ DE RELATÓRIOS MODULARIZADO")
+    print(" 🤖 ROBÔ DE RELATÓRIOS (AUTOMÁTICO)")
     print(f" 📂 Saída: {cfg.PASTA_FINAL}")
     print(f" 📅 Data: {cfg.texto_periodo_filtro} ({cfg.label_periodo})")
     print("="*50)
     
-    input(">>> Faça o Login se necessário. Quando o painel carregar, APERTE ENTER <<<")
+    # Aguarda carregamento inicial e possível login automático por cookie
+    print("⏳ Aguardando carregamento (20s)...")
+    time.sleep(20)
     
     bot.ajustar_zoom("100%")
 
@@ -56,7 +84,7 @@ def processar_relatorio():
                 nome_limpo, cfg.texto_periodo_filtro, cfg.PASTA_FINAL, cfg.PASTA_DIR
             )
     else:
-        # Loop por Cliente
+        # Loop por Cliente (Fluxo Normal)
         for nome_cliente in CLIENTES:
             print(f"\n------------------------------------------------")
             print(f"Processando: {nome_cliente}")
@@ -100,7 +128,6 @@ def processar_relatorio():
                 # Cliente não encontrado na lista -> Gera Vazio Fabricado
                 print(f"   ⚠️ Cliente '{nome_cliente}' não encontrado. Gerando vazio...")
                 
-                # Garante que menu fechou
                 ActionChains(bot.driver).send_keys(Keys.ESCAPE).perform()
                 time.sleep(1)
                 
@@ -119,11 +146,14 @@ def processar_relatorio():
     # 4. Finalização
     bot.quit()
     
-    # Upload Cirúrgico da pasta de hoje
+    # Upload da pasta do dia
     upload_minio.executar_upload(cfg.nome_pasta_data)
     
+    # Chama o N8N para começar o envio
+    acionar_n8n()
+
     print("\n--- Processo Finalizado ---")
-    input("Enter para sair...")
+    # input("Enter para sair...") # Removido para fechar sozinho em automação
 
 if __name__ == "__main__":
     processar_relatorio()
